@@ -189,6 +189,11 @@ namespace :integration_tests do
   RSpec::Core::RakeTask.new(:test_html => :build_all_test_integrations) do |t|
     t.pattern = 'integration_tests/*_spec.rb'
   end
+  desc 'Test page renders without sending any Content-Security-Policy reports'
+  task :test_content_security_policy => :build_all_test_integrations do
+    require "open3"
+    _stdin, stdout, stderr, wait_thr = Open3.popen3("./integration_tests/csp-validator/csp-validator.js")
+  end
 end
 
 task :spec => :compile
